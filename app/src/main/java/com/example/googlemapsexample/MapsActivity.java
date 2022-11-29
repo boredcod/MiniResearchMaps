@@ -22,39 +22,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //binds map activity to an layout inflator
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Assigns a mapFragment to an existing fragment with an id of map.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        // Gets a mapFragment asynchronously
         mapFragment.getMapAsync(this);
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //once the map is ready
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        // Add a default map marker in Boston area.
+        LatLng sydney = new LatLng(42,  -71);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Boston"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
+                //creates a map marker at position that the user clicks on.
                 MarkerOptions marker = new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).title("New Marker");
                 mMap.addMarker(marker);
+                //moves camera to the point where the user put the marker on.
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                //Makes a toast where it shows the latitude and longitude of the position.
                 Toast.makeText(getApplicationContext(), "the location in Latitude : " + latLng.latitude + " Longitude : " + latLng.longitude
                         , Toast.LENGTH_SHORT).show();
 
